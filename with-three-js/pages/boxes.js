@@ -1,53 +1,62 @@
-import { useRef, useState, Suspense } from 'react';
+import React, { useRef, useState, Suspense } from 'react';
 import { Canvas, useFrame } from 'react-three-fiber';
-import {
-  OrbitControls,
-  StandardEffects,
-  Box,
-  Circle,
-  Cylinder,
-  Tube,
-} from 'drei';
-import { TubeGeometry } from 'three';
+import Router from 'next/router';
 
-const MyBox = (props) => {
+const Box = (props) => {
   const mesh = useRef();
 
   const [hovered, setHover] = useState(false);
   const [active, setActive] = useState(false);
-
+  const [scale, setScale] = useState([8, 8, 8]);
   useFrame(() => (mesh.current.rotation.x = mesh.current.rotation.y += 0.01));
 
+  // const handleMeshClick = () => {
+  //   setTimeout(() => {
+  //     setActive(true);
+  //   }, 1000);
+  //   setTimeout(() => {
+  //     Router.push('/birds');
+  //   }, 2000);
+  // };
+
+  const handleMeshClick = () => {
+    setActive(true);
+
+    Router.push('/birdtest');
+  };
+
   return (
-    <Tube
-      args={[1, 1, 5, 10]}
+    <mesh
       {...props}
       ref={mesh}
-      scale={active ? [6, 6, 6] : [5, 5, 5]}
-      onClick={() => setActive(!active)}
-      onPointerOver={() => setHover(true)}
-      onPointerOut={() => setHover(false)}
+      scale={active ? scale : [5, 5, 5]}
+      onClick={handleMeshClick}
+      onPointerOver={(e) => setHover(true)}
+      onPointerOut={(e) => setHover(false)}
     >
+      <boxBufferGeometry attach="geometry" args={[1, 1, 1]} />
       <meshStandardMaterial
         attach="material"
         color={hovered ? '#2b6c76' : '#720b23'}
       />
-    </Tube>
+    </mesh>
   );
 };
 
-const BoxesPage = () => {
+const BirdsPage = () => {
   return [
     <h1>Click on me - Hover me :)</h1>,
     <Canvas camera={{ position: [0, 0, 35] }}>
       <ambientLight intensity={2} />
       <pointLight position={[40, 40, 40]} />
-      <MyBox position={[10, 0, 0]} />
       <Suspense fallback={null}>
-        <StandardEffects smaa />
+        <Box position={[10, 0, 0]} />
+        <Box position={[-10, 0, 0]} />
+        <Box position={[0, 10, 0]} />
+        <Box position={[0, -10, 0]} />
       </Suspense>
     </Canvas>,
   ];
 };
 
-export default BoxesPage;
+export default BirdsPage;
