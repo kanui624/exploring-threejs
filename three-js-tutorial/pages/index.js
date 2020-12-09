@@ -4,10 +4,14 @@ import { useRef, useState, Suspense } from 'react';
 import * as THREE from 'three';
 // React Three Fiber
 import { useThree, Canvas, useFrame, useLoader } from 'react-three-fiber';
-
+// Drei
 import { softShadows, Html, OrbitControls, useGLTF } from '@react-three/drei';
 
+// React Spring
 import { useSpring, a } from 'react-spring/three';
+
+// GLTF Objects
+import Tree from '../three/tree';
 
 import Router from 'next/router';
 import { Geometry } from 'three';
@@ -28,16 +32,17 @@ const SphereMesh = ({ position, args, speed, link, name }) => {
     scale: expand ? [0.5, 0.5, 0.5] : [0.25, 0.25, 0.25],
   });
 
-  const handleClick = (e) => {
+  const handlePointer = (e) => {
     e.stopPropagation();
-    console.log(raycaster);
+    console.log(e);
     setExpand(!expand);
-    // Router.push(`/${link}`);
+    setTimeout(() => {
+      Router.push(`/${link}`);
+    }, 1000);
   };
 
   const handleHover = (e, cursor) => {
     e.stopPropagation();
-
     if (cursor) {
       setHovered(true);
       document.body.style.cursor = 'pointer';
@@ -49,7 +54,8 @@ const SphereMesh = ({ position, args, speed, link, name }) => {
 
   return (
     <a.mesh
-      onClick={(e) => handleClick(e)}
+      onPointerDown={(e) => handlePointer(e)}
+      // onPointerMove={(e) => null}
       onPointerOver={(e) => handleHover(e, true)}
       onPointerOut={(e) => handleHover(e, false)}
       scale={props.scale}
@@ -72,19 +78,6 @@ const SphereMesh = ({ position, args, speed, link, name }) => {
         </p>
       </Html> */}
     </a.mesh>
-  );
-};
-
-const Tree = () => {
-  const gtlf = useGLTF('/treeOne.gltf', true);
-  const tree = useRef(null);
-  // console.log(tree);
-  return (
-    <mesh ref={tree} castShadow position={[0, -3, 0]} scale={[0.8, 0.8, 0.8]}>
-      <primitive object={gtlf.scene} dispose={null} />;
-      <bufferGeometry attach="geometry" />
-      <meshStandardMaterial attach="material" />
-    </mesh>
   );
 };
 
@@ -149,9 +142,9 @@ const Three = () => {
           <Tree />
         </group>
         <OrbitControls
-          enableZoom={false}
+          // enableZoom={false}
           // enableKeys={true}
-          minPolarAngle={Math.PI / 2 - 0.1}
+          minPolarAngle={Math.PI / 2 - 0.2}
           maxPolarAngle={Math.PI / 2}
           autoRotate
         />

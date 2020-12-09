@@ -1,11 +1,10 @@
-import { useGTLF } from '@react-three/drei';
+// Three
+import { useGLTF } from '@react-three/drei';
 
 const Tree = () => {
-  const gtlf = useGLTF('/treeOne.gltf', true);
-  const tree = useRef(null);
-  // console.log(tree);
+  const gtlf = useGLTF('/treeOne.gltf');
   return (
-    <mesh ref={tree} castShadow position={[0, -3, 0]} scale={[0.8, 0.8, 0.8]}>
+    <mesh castShadow position={[0, -3, 0]} scale={[0.8, 0.8, 0.8]}>
       <primitive object={gtlf.scene} dispose={null} />;
       <bufferGeometry attach="geometry" />
       <meshStandardMaterial attach="material" />
