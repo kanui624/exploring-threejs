@@ -1,0 +1,110 @@
+- LOAD A GTLF OBJECT:
+import { useGLTF } from '@react-three/drei';
+    const gtlf = useGLTF('/Object.gltf');
+    <primitive object={gtlf.scene} dispose={null} /> 
+
+- USE OBJECT AS HREF:
+    import Router from 'next/router';
+        onPointerDown={(e) => handlePointer(e)}
+        const handlePointer = (e) => {
+            Router.push(`/${link}`);
+        };
+
+- ONLY CLICK ON MESH CLOSEST TO THE CAMERA:
+        const handlePointer = (e) => {
+              e.stopPropagation();
+        };
+
+- LIMIT Y AXIS ORBIT CONTROLS, DISABLE ZOOM, AND ENABLE AUTO ROTATE:
+        import { OrbitControls } from '@react-three/drei';
+            <OrbitControls
+            enableZoom={false}
+            minPolarAngle={Math.PI / 2 - 0.5}
+            maxPolarAngle={Math.PI / 2}
+            autoRotate
+            />; 
+
+ - CHANGE CURSOR TO POINTER ON OBJECT HOVER:
+        const handleHover = (cursor) => {
+        cursor
+            ? (document.body.style.cursor = 'pointer')
+            : (document.body.style.cursor = 'default');
+        };
+        <mesh
+            onPointerOver={() => handleHover(true)}
+            onPointerOut={() => handleHover(false)}
+        > 
+
+- ATTACH HTML TO OBJECT SHITTY WAY:
+ import { Html } from '@react-three/drei';
+    <Html center>
+    <p
+        onClick={(e) => handleClick(e)}
+        onPointerOver={(e) => handleHover(e, true)}
+        onPointerOut={(e) => handleHover(e, false)}
+    >
+        {name}
+    </p>
+    </Html>
+
+- HOW TO SET AND INTEVAL IN REACT
+    useEffect(() => {
+    const interval = setInterval(() => {
+        console.log('This will run every second!');
+    }, 1000);
+    return () => clearInterval(interval);
+    }, []); 
+
+- STOP AUTO ROTATION ON HOVER
+
+- CREATE SHADOW FROM LOADED OBJECT
+
+- CHANGE BACKGROUND CANVAS:
+    <Canvas
+      onCreated={({ scene }) => {
+        scene.background = new THREE.Color('#f5f1da');
+      }}
+    >
+
+- REPONSIVELY CHANGE FOV 
+
+- PLAY ANIMATION ON CLICK
+
+- TRIGGER AUDIO ON CLICK
+
+- TRIGGER ORBIT CONTROLS ANIMATION ON CLICK
+
+- COLLAPSE CANVAS ON LINK CLICK
+
+- PHYSICS ON LEAVES ON HOVER
+
+- ANIMATE WALNUT ON HOVER
+
+################## NEEDS MORE TESTING ######################
+
+-  ANIMATE FROM FIRST FRAME TO LAST FRAME ON CLICK:
+    const [mixer] = useState(() => new THREE.AnimationMixer());
+    let animation = mixer
+    .clipAction(gltf.animations[0], group.current)
+    .setLoop(THREE.LoopOnce);
+    animation.clampWhenFinished = true;
+    animation.enable = true;
+    animation.play();
+
+## MISC ##
+
+clicked ? (z = 80) : (z = 10),
+from: {
+  z: 80,
+},
+z: 10,
+onFrame: ({ z }) => {
+  camera.position.z = z;
+},
+
+const springRef = useRef();
+const { size, opacity, ...rest } = useSpring({
+  ref: springRef,
+  from: { size: '20%', background: 'hotpink' },
+  to: { size: open ? '100%' : '20%', background: open ? 'white' : 'hotpink' },
+});
