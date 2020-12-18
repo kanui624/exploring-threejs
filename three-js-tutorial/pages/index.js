@@ -22,8 +22,8 @@ const OControls = () => {
   return (
     <OrbitControls
       enableZoom={false}
-      minPolarAngle={Math.PI / 2 - 0.5}
-      maxPolarAngle={Math.PI / 2 - 0.5}
+      minPolarAngle={Math.PI / 2 - 0.4}
+      maxPolarAngle={Math.PI / 2 - 0.4}
       autoRotate
     />
   );
@@ -89,7 +89,7 @@ const Lights = () => {
 
   return (
     <>
-      <ambientLight intensity={0.6} />
+      <ambientLight intensity={0.8} />
       {/* <directionalLight
         ref={dlight}
         castShadow
@@ -146,13 +146,12 @@ const Group = () => {
 };
 
 const Three = () => {
-  THREE.LinearFilter;
   return (
     <Canvas
       className="c"
       shadowMap
       colorManagement
-      camera={{ position: [1, 1, 1], fov: 10 }}
+      camera={{ position: [1, 1, 1], fov: 13 }}
       // onCreated={({ scene }) => {
       //   scene.background = new THREE.TextureLoader().load(
       //     '/images/whitetpaper.png'

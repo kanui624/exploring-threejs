@@ -14,18 +14,16 @@
 
 // export default Tree;
 
+import { useRef } from 'react';
 // Three
-import { useThree } from 'react-three-fiber';
 import { useGLTF } from '@react-three/drei';
 
 const Tree = () => {
-  const gtlf = useGLTF('/sapling-v4.gltf');
-  const { camera } = useThree();
-  console.log(camera);
+  const paperPlant = useRef();
+  const gtlf = useGLTF('/sapling-v6.gltf');
+  console.log(paperPlant);
   return (
-    <mesh position={[0, -0.75, 0]}>
-      {/* <bufferGeometry attach="geometry" />
-      <meshStandardMaterial attach="material" /> */}
+    <mesh ref={paperPlant} position={[0, -0.74, 0]} rotation={[0, 2.7, 0]}>
       <primitive object={gtlf.scene} dispose={null} />;
     </mesh>
   );
