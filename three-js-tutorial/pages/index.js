@@ -30,13 +30,14 @@ const OControls = () => {
 };
 
 const MenuRip = ({
+  link,
+  label,
   imgFront,
   imgBack,
+  scale,
   pos,
   frontRotate,
   backRotate,
-  url,
-  scale,
 }) => {
   const [menuRipFront, menuRipBack] = useMemo(() => {
     const loader = new THREE.TextureLoader();
@@ -48,10 +49,12 @@ const MenuRip = ({
   };
 
   const handlePointerUp = (e) => {
-    // setTimeout(() => {
-    //   Router.push(`/${url}`);
-    // }, 500);
+    setTimeout(() => {
+      Router.push(`/${link}`);
+    }, 500);
   };
+
+  // const plane = useRef();
 
   const handleHover = (e, cursor) => {
     e.stopPropagation();
@@ -62,20 +65,16 @@ const MenuRip = ({
     }
   };
 
-  const rip = useRef();
-  useEffect(() => {
-    console.log(rip);
-  }, [rip]);
-
   return (
     <group>
       <mesh position={pos} rotation={backRotate}>
         <planeBufferGeometry attach="geometry" args={scale} />
-        <meshStandardMaterial attach="material" transparent={true} ref={rip}>
+        <meshStandardMaterial attach="material" transparent>
           <primitive attach="map" object={menuRipBack} />
         </meshStandardMaterial>
       </mesh>
       <mesh
+        name={label}
         position={pos}
         rotation={frontRotate}
         onPointerDown={(e) => handlePointerDown(e)}
@@ -83,8 +82,12 @@ const MenuRip = ({
         onPointerOver={(e) => handleHover(e, true)}
         onPointerOut={(e) => handleHover(e, false)}
       >
-        <planeBufferGeometry attach="geometry" args={scale} />
-        <meshStandardMaterial attach="material" transparent={true} ref={rip}>
+        <planeBufferGeometry
+          attach="geometry"
+          args={scale}
+          // ref={plane}
+        />
+        <meshStandardMaterial attach="material" transparent>
           <primitive attach="map" object={menuRipFront} />
         </meshStandardMaterial>
       </mesh>
@@ -93,23 +96,96 @@ const MenuRip = ({
 };
 
 const Lights = () => {
-  return <ambientLight intensity={0.8} />;
+  return <ambientLight intensity={0.75} />;
 };
 
 const Group = () => {
+  const menuOptions = [
+    {
+      id: 0,
+      link: 'baklava',
+      label: 'baklava',
+      imgFUrl: 'baklava.png',
+      imgBUrl: 'baklava-back.png',
+      scale: [0.18, 0.18],
+      position: [0.2, 0.055, 0.05],
+      frontRotation: [0, 1.2, 0],
+      backRotation: [0, Math.PI + 1.2, 0],
+    },
+    {
+      id: 1,
+      link: 'animalrights',
+      label: 'animal rights',
+      imgFUrl: 'animal-rights.png',
+      imgBUrl: 'animal-rights-back.png',
+      scale: [0.17, 0.17],
+      position: [0.01, 0.05, 0.25],
+      frontRotation: [0, 0, 0],
+      backRotation: [0, Math.PI, 0],
+    },
+    {
+      id: 2,
+      link: 'about',
+      label: 'about',
+      imgFUrl: 'about.png',
+      imgBUrl: 'about-back.png',
+      scale: [0.18, 0.18],
+      position: [0.1, 0.1, -0.18],
+      frontRotation: [0, Math.PI - 0.45, 0],
+      backRotation: [0, Math.PI * 2 - 0.45, 0],
+    },
+    {
+      id: 3,
+      link: 'merch',
+      label: 'merch',
+      imgFUrl: 'merch.png',
+      imgBUrl: 'merch-back.png',
+      scale: [0.17, 0.17],
+      position: [-0.1, 0, -0.18],
+      frontRotation: [0.05, Math.PI + 0.4, 0],
+      backRotation: [0.05, Math.PI * 2 + 0.4, 0],
+    },
+    {
+      id: 4,
+      link: 'contact',
+      label: 'contact',
+      imgFUrl: 'contact.png',
+      imgBUrl: 'contact-back.png',
+      scale: [0.18, 0.18],
+      position: [-0.2, 0.01, 0.07],
+      frontRotation: [0, Math.PI + 1.9, 0],
+      backRotation: [0, Math.PI * 2 + 1.9, 0],
+    },
+  ];
   return (
     <group position={[0, 0, 0]}>
       <Lights />
       <Tree />
-      <MenuRip
-        pos={[0.2, 0.1, 0.08]}
-        frontRotate={[0, 1.2, 0]}
-        backRotate={[0, Math.PI + 1.2, 0]}
-        scale={[0.15, 0.15]}
-        imgFront={'/menurips/front/baklava_1.png'}
-        imgBack={'/menurips/back/baklava-back_1_1.png'}
-        url={'boxonelink'}
-      />
+      {menuOptions.map(
+        ({
+          id,
+          label,
+          link,
+          scale,
+          imgFUrl,
+          imgBUrl,
+          position,
+          frontRotation,
+          backRotation,
+        }) => (
+          <MenuRip
+            key={id}
+            label={label}
+            link={link}
+            scale={scale}
+            imgFront={`/menurips/front/${imgFUrl}`}
+            imgBack={`/menurips/back/${imgBUrl}`}
+            pos={position}
+            frontRotate={frontRotation}
+            backRotate={backRotation}
+          />
+        )
+      )}
       <OControls />
     </group>
   );
