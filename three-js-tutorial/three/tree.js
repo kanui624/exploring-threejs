@@ -23,7 +23,7 @@ const Tree = () => {
   const gtlf = useGLTF('/sapling-v6.gltf');
   console.log(paperPlant);
   return (
-    <mesh ref={paperPlant} position={[0, -0.74, 0]} rotation={[0, 2.7, 0]}>
+    <mesh ref={paperPlant} position={[0, -0.74, 0]} rotation={[0, 3.5, 0]}>
       <primitive object={gtlf.scene} dispose={null} />;
     </mesh>
   );
