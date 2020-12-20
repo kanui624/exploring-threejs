@@ -29,19 +29,28 @@ const OControls = () => {
   );
 };
 
-const MenuRip = ({ imgFront, imgBack, pos, rotate, url, scale }) => {
-  const texture = useMemo(() => new THREE.TextureLoader().load(imgFront), [
-    imgFront,
-  ]);
+const MenuRip = ({
+  imgFront,
+  imgBack,
+  pos,
+  frontRotate,
+  backRotate,
+  url,
+  scale,
+}) => {
+  const [menuRipFront, menuRipBack] = useMemo(() => {
+    const loader = new THREE.TextureLoader();
+    return [loader.load(imgFront), loader.load(imgBack)];
+  }, [imgFront, imgBack]);
 
   const handlePointerDown = (e) => {
     e.stopPropagation();
   };
 
   const handlePointerUp = (e) => {
-    setTimeout(() => {
-      Router.push(`/${url}`);
-    }, 500);
+    // setTimeout(() => {
+    //   Router.push(`/${url}`);
+    // }, 500);
   };
 
   const handleHover = (e, cursor) => {
@@ -53,20 +62,33 @@ const MenuRip = ({ imgFront, imgBack, pos, rotate, url, scale }) => {
     }
   };
 
+  const rip = useRef();
+  useEffect(() => {
+    console.log(rip);
+  }, [rip]);
+
   return (
-    <mesh
-      position={pos}
-      rotation={rotate}
-      onPointerDown={(e) => handlePointerDown(e)}
-      onPointerUp={(e) => handlePointerUp(e)}
-      onPointerOver={(e) => handleHover(e, true)}
-      onPointerOut={(e) => handleHover(e, false)}
-    >
-      <planeBufferGeometry attach="geometry" args={scale} />
-      <meshLambertMaterial attach="material" transparent>
-        <primitive attach="map" object={texture} />
-      </meshLambertMaterial>
-    </mesh>
+    <group>
+      <mesh position={pos} rotation={backRotate}>
+        <planeBufferGeometry attach="geometry" args={scale} />
+        <meshStandardMaterial attach="material" transparent={true} ref={rip}>
+          <primitive attach="map" object={menuRipBack} />
+        </meshStandardMaterial>
+      </mesh>
+      <mesh
+        position={pos}
+        rotation={frontRotate}
+        onPointerDown={(e) => handlePointerDown(e)}
+        onPointerUp={(e) => handlePointerUp(e)}
+        onPointerOver={(e) => handleHover(e, true)}
+        onPointerOut={(e) => handleHover(e, false)}
+      >
+        <planeBufferGeometry attach="geometry" args={scale} />
+        <meshStandardMaterial attach="material" transparent={true} ref={rip}>
+          <primitive attach="map" object={menuRipFront} />
+        </meshStandardMaterial>
+      </mesh>
+    </group>
   );
 };
 
@@ -81,9 +103,11 @@ const Group = () => {
       <Tree />
       <MenuRip
         pos={[0.2, 0.1, 0.08]}
-        rotate={[0, 1.2, 0]}
+        frontRotate={[0, 1.2, 0]}
+        backRotate={[0, Math.PI + 1.2, 0]}
         scale={[0.15, 0.15]}
         imgFront={'/menurips/front/baklava_1.png'}
+        imgBack={'/menurips/back/baklava-back_1_1.png'}
         url={'boxonelink'}
       />
       <OControls />
